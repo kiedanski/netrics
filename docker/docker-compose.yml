@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+  netrics:
+    build: .
+    image: netrics/deploy:1.0
+    command: 'netrics control --continual'
+    volumes:
+      - './data:/tmp/results/'

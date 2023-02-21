@@ -1,0 +1,30 @@
+[ping]
+schedule = "*/1 * * * *"
+
+[ping.path]
+result = "/tmp/results"
+
+[ping.param]
+destinations = [
+    "google.com",
+    "netflix.com",
+    "nytimes.com",
+    "facebook.com",
+    "reddit.com",
+    "github.com",
+    "linkedin.com",
+]
+
+
+[traceroute]
+schedule = "*/1 * * * *"
+
+[traceroute.path]
+result = "/tmp/results"
+
+[traceroute.param]
+targets = [
+    "1.1.1.1",
+    "nytimes.com",
+]
+
