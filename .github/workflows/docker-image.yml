@@ -19,6 +19,6 @@ jobs:
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
       run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
     - name: Build the Docker image
-      run: echo $PWD && docker build docker/ --tag netrics/pi:$(date +%s)
+      run: echo $PWD && docker build docker/ --tag ${{secrets.DOCKER_USER}/netrics:$(date +%s)
     - name: Docker Push
       run: docker push ${{secrets.DOCKER_USER}}/netrics
