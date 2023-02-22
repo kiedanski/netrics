@@ -1,8 +1,7 @@
 version: '3.8'
 services:
   netrics:
-    build: .
-    image: netrics/deploy:1.0
+    image: danski3456/netrics:adding-docker
     command: 'netrics control --continual'
     volumes:
       - './data:/tmp/results/'
