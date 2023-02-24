@@ -40,6 +40,7 @@ fi
  mkdir -p data
  
  curl -o docker-compose.yml https://raw.githubusercontent.com/kiedanski/netrics/adding-docker/docker/docker-compose.yml
+ curl -o notifys3 https://raw.githubusercontent.com/kiedanski/netrics/adding-docker/docker/notifys3
 
 
 # Create service for docker compose
