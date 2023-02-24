@@ -5,4 +5,4 @@ services:
     platform: linux/arm/v8
     command: 'netrics control --continual'
     volumes:
-      - './data:/home/netrics/.local/share/netrics/result'
+      - './data:/tmp/results/'
