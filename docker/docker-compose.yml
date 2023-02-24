@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+  netrics:
+    image: danski3456/netrics:latest
+    platform: linux/arm/v8
+    command: 'netrics control --continual'
+    volumes:
+      - './data:/tmp/results/'

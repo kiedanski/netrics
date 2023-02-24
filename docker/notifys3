@@ -1,0 +1,61 @@
+#!/bin/bash
+#
+# Push2 S3
+# Copyright (c) 2013-2014 Alexey Baikov <sysboss [at] mail.ru>
+#
+# Watches specified directory for changes and copy newly created
+# or modified files to Amazon S3 Cloud.
+
+WATCH_DIR='/home/pi/netrics-deployment/data'
+PID_FILE='/var/run/push2s3.pid'
+BUCKET='netrics-deployment'
+len=${#WATCH_DIR}
+
+# verify inotify installed
+if [ ! -x "/usr/bin/inotifywait" ] ; then
+    echo "ERROR: This uses the inotifywait program, which on a Debian-based system is"
+    echo "part of the 'inotify-tools' package. Please install that and try again."
+    exit 1
+fi
+
+# create PID file
+echo $$ > $PID_FILE
+
+# file upload
+function upload() {
+    local path=$1
+    local file=$2
+    local target=${path:$len}
+
+    aws s3 cp $path$file s3://$BUCKET$target$file
+}
+function delete() {
+    local path=$1
+    local file=$2
+    local target=${path:$len}
+
+    aws s3 rm s3://$BUCKET$target$file
+}
+
+# init
+inotifywait --recursive --monitor --exclude '.*\.sw[px]*$|4913|~$' $WATCH_DIR |
+while read action_dir event_list action_file; do
+    if [[ $file =~ .*/\..* ]]; then
+        echo "Hidden file ignored"
+    else
+        if [ -f "$action_dir$action_file" ]; then # only process a file, not a directory
+            case "${event_list}" in
+              CLOSE_WRITE* )
+                echo "UPLOAD to s3 $action_dir$action_file"
+                upload "$action_dir" "$action_file"
+              ;;
+              MOVED_TO* )
+                echo "UPLOAD to s3 $action_dir$action_file"
+                upload "$action_dir" "$action_file"
+              ;;
+            esac
+        fi
+
+        #echo "Got an event $action_dir$action_file $event_list"
+    fi
+done
